@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เปิดซองวาเลนไทน์</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe4e1;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .envelope-container {
+            position: relative;
+            width: 90vw;
+            max-width: 600px;
+            height: 60vh;
+            max-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .envelope {
+    position: relative;
+    width: 280px;
+    height: 180px;
+    background-color: #f9c5c8;
+    border-radius: 15px;
+    cursor: pointer; /* เพิ่มเพื่อให้รู้ว่าสามารถคลิกได้ */
+    transition: transform 0.5s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #b71c1c;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        .content {
+            position: absolute;
+            width: 80%;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(50%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            cursor: pointer;
+        }
+        .content img {
+    width: 100%;
+    height: auto;
+    max-width: 100%; /* กำหนดให้กว้างสุดเท่ากับความกว้างของคอนเทนเนอร์ */
+    max-height: 100%; /* เพิ่มขนาดสูงสุดที่คุณต้องการ */
+    object-fit: cover; /* กำหนดให้รูปมีการครอบตัดตามขนาดของคอนเทนเนอร์ */
+    border-radius: 10px;
+}
+       .content video {
+            width: 100%;
+            height: auto;
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            height: 200px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #d32f2f;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .opened .flap {
+            transform: rotateX(180deg);
+        }
+        .opened .content {
+            opacity: 1;
+            transform: translateY(-20%);
+        }
+        .show-message .message {
+            opacity: 1;
+        }
+
+        /* Media Query สำหรับมือถือ */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                background-color: #f8d7da; /* เปลี่ยนสีพื้นหลังสำหรับมือถือ */
+            }
+
+            .envelope-container {
+                width: 100vw; /* ให้พื้นที่ซองเต็มหน้าจอมือถือ */
+                height: 50vh; /* ลดขนาดของซอง */
+            }
+
+            .message {
+                font-size: 18px; /* ขนาดข้อความในซองเล็กลงสำหรับมือถือ */
+                width: 90%;
+                max-width: 350px;
+            }
+
+            /* ลดขนาดของรูปสำหรับมือถือ */
+            .content img {
+                max-width: 80%; /* ลดขนาดรูปเป็น 80% สำหรับมือถือ */
+                max-height: 60%; /* ลดขนาดรูปเป็น 60% สำหรับมือถือ */
+            }
+        }
+
+        /* Media Query สำหรับจอขนาดเล็กมาก (สมาร์ทโฟนแนวตั้ง) */
+        @media (max-width: 480px) {
+            .envelope-container {
+                height: 40vh; /* ลดขนาดลงอีกเล็กน้อย */
+            }
+
+            .content img {
+                max-width: 70%; /* ลดขนาดรูปเป็น 70% */
+                max-height: 50%; /* ลดขนาดรูปเป็น 50% */
+            }
+
+            .message {
+                font-size: 16px; /* ขนาดข้อความที่เล็กลง */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="content" id="content">
+                <img id="displayImage" src="img/Donut.jpg" alt="รูปวาเลนไทน์">
+                
+            </div>
+        </div>
+        <div class="message" id="message">สุขสันต์วันวาเลนไทน์ ❤️</div>
+    </div>
+
+    <script>
+        let envelope = document.getElementById('envelope');
+let content = document.getElementById('content');
+let message = document.getElementById('message');
+let displayImage = document.getElementById('displayImage');
+
+// กำหนดพาธรูปในเครื่อง
+let img1 = "img/Donut2.jpg";  // รูปแรก
+let img2 = "img/text1.jpg";//รูปที่สอง
+let isImage1 = true; // ตัวแปรเช็คว่ารูปไหนแสดงอยู่
+
+// คลิกที่ซองเพื่อเปิด
+envelope.addEventListener('click', function() {
+    envelope.classList.add('opened');
+    setTimeout(() => {
+        content.classList.add('opened');
+    }, 500);
+});
+
+// คลิกที่รูปเพื่อสลับภาพ
+displayImage.addEventListener('click', function() {
+    if (isImage1) {
+        displayImage.src = img1; // เปลี่ยนเป็นรูปที่ 2
+    } else {
+        displayImage.src = img2; // เปลี่ยนกลับเป็นรูปที่ 1
+    }
+    isImage1 = !isImage1; // สลับค่า
+});
+
+// คลิกที่เนื้อหาเพื่อแสดงข้อความ
+content.addEventListener('click', function() {
+    message.classList.add('show-message');
+});
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
+    <title>เปิดซองวาเลนไทน์</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe4e1;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .envelope-container {
+            position: relative;
+            width: 90vw;
+            max-width: 400px;
+            height: 50vh;
+            max-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .envelope {
+            position: relative;
+            width: 240px;
+            height: 160px;
+            background-color: #f9c5c8;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #b71c1c;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        .content {
+            position: absolute;
+            width: 90%;
+            max-width: 280px;
+            opacity: 0;
+            transform: translateY(50%);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            cursor: pointer;
+        }
+       .content img, .content video {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 70%;
+    object-fit: cover;
+    border-radius: 10px;
+    transform: translateY(50px); /* เริ่มต้นอยู่ด้านล่าง */
+    opacity: 0;
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.opened .content img,
+.opened .content video {
+    transform: translateY(0); /* เลื่อนขึ้น */
+    opacity: 1;
+}
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 320px;
+            height: 180px;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #d32f2f;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        .opened .flap {
+            transform: rotateX(180deg);
+        }
+        .opened .content {
+            opacity: 1;
+            transform: translateY(-20%);
+        }
+        .show-message .message {
+            opacity: 1;
+        }
+        .switch-button {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="envelope-container">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="content" id="content">
+                <video id="displayVideo" src="static/assets/velentineBD/video/valentine.mp4" controls></video>
+                <img id="displayImage" src="static/assets/velentineBD/img/Donut.jpg" alt="รูปวาเลนไทน์" style="display: none;">
+            </div>
+        </div>
+        <button id="switchButton" class="switch-button">กดสิคับบ</button>
+        <div class="message" id="message">สุขสันต์วันวาเลนไทน์ ❤️</div>
+    </div>
+    <script>
+        let envelope = document.getElementById('envelope');
+        let content = document.getElementById('content');
+        let message = document.getElementById('message');
+        let displayVideo = document.getElementById('displayVideo');
+        let displayImage = document.getElementById('displayImage');
+        let switchButton = document.getElementById('switchButton');
+        let img1 = "static/assets/velentineBD/img/text1.jpg";
+        let img2 = "static/assets/velentineBD/img/text2.jpg";
+        let isImage1 = true;
+        let isVideoPlaying = true;
+
+        envelope.addEventListener('click', function() {
+            envelope.classList.add('opened');
+            setTimeout(() => {
+                content.classList.add('opened');
+                switchButton.style.display = 'block';
+            }, 500);
+        });
+
+        switchButton.addEventListener('click', function() {
+            if (isVideoPlaying) {
+                displayVideo.style.display = 'none';
+                displayImage.style.display = 'block';
+                isVideoPlaying = false;
+            } else {
+                if (isImage1) {
+                    displayImage.src = img1;
+                } else {
+                    displayImage.src = img2;
+                }
+                isImage1 = !isImage1;
+            }
+        });
+    </script>
+</body>
+</html>
+
